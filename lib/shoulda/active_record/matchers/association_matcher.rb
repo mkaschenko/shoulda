@@ -191,7 +191,12 @@ module Shoulda # :nodoc:
         end
 
         def foreign_key
-          reflection.primary_key_name
+          method_name = if reflection.respond_to? :primary_key_name
+            :primary_key_name
+          else
+            :foreign_key
+          end
+          reflection.send method_name
         end
 
         def through?
